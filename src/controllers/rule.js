@@ -1,12 +1,11 @@
 const Rule = require('../models/rule');
+const { genRuleOrder } = require('../utils/genOrder');
 
 // add rule
 const addRule = async (req, res) => {
-	console.log(req.body);
 	const {
 		ruleId,
 		ruleName,
-		ruleOrder,
 		ruleParent,
 		caseType,
 		ruleTarget,
@@ -14,14 +13,15 @@ const addRule = async (req, res) => {
 		ruleFeatures,
 		isStop,
 	} = req.body;
-
 	const existingRule = await Rule.findOne({ ruleId });
 	if (existingRule) {
 		return res.status(202).json('Rule already exist');
 	}
 
 	const maxRule = await Rule.find().sort({ ruleOrder: -1 }).limit(1);
-	console.log(maxRule);
+
+	const ruleOrder = genRuleOrder(maxRule);
+	console.log(ruleOrder);
 
 	const rule = new Rule({
 		ruleId,
