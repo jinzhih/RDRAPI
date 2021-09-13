@@ -20,6 +20,9 @@ const addRule = async (req, res) => {
 		return res.status(202).json('Rule already exist');
 	}
 
+	const maxRule = await Rule.find().sort({ ruleOrder: -1 }).limit(1);
+	console.log(maxRule);
+
 	const rule = new Rule({
 		ruleId,
 		ruleName,
@@ -58,4 +61,18 @@ const getRulesByCaseType = async (req, res) => {
 	return res.json(rules);
 };
 
-module.exports = { addRule, getRulesByRuleId, getRulesByCaseType };
+// delete rule by ruleId
+const deleteRule = async (req, res) => {
+	const ruleId = req.params;
+	const rule = await Rule.find(ruleId).exec();
+	console.log(rule);
+	if (rule.length === 0) {
+		return res.status(404).json('rule not found in this ruleid');
+	}
+
+	const id = rule[0]._id;
+	await Rule.findByIdAndDelete(id).exec();
+	return res.status(200).send('delete successful');
+};
+
+module.exports = { addRule, getRulesByRuleId, getRulesByCaseType, deleteRule };
