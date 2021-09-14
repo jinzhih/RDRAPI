@@ -12,7 +12,7 @@ const schema = new Schema({
 	caseType: { type: Number },
 	ruleTarget: { type: String },
 	ruleConclusion: { type: String },
-	ruleFeatures: { type: Object },
+	ruleFeatures: { type: Map },
 	isStop: {
 		type: Boolean,
 		default: false,
