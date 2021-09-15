@@ -126,6 +126,60 @@ const updateRule = async (req, res) => {
 	return res.json(newRule);
 };
 
+//update rules and add a new one
+const updateRuleAndAdd = async (req, res) => {
+	const ruleId = req.params;
+	console.log(ruleId.ruleId);
+	const {
+		name,
+		ruleParent,
+		caseType,
+		target,
+		conclusion,
+		atts,
+		isStop,
+		nextRuleId,
+		subRuleIds,
+		cornerStoneId,
+	} = req.body;
+	console.log(req.body);
+	const rule = await Rule.find(ruleId).exec();
+	if (rule.length === 0) {
+		return res.status(404).json('rule not found in this ruleid');
+	}
+	const id = rule[0]._id;
+	const updateRule = await Rule.findByIdAndUpdate(
+		id,
+		{
+			isStop: true,
+		},
+		{ new: true }
+	).exec();
+	const maxRule = await Rule.find().sort({ ruleOrder: -1 }).limit(1);
+
+	const ruleOrder = genRuleOrder(maxRule);
+	console.log(ruleOrder);
+
+	const addrule = new Rule({
+		ruleId: 0,
+		name,
+		ruleParent,
+		caseType,
+		target,
+		conclusion,
+		atts,
+		isStop,
+		nextRuleId,
+		subRuleIds,
+		cornerStoneId,
+		ruleOrder,
+	});
+	console.log(addrule);
+
+	await addrule.save();
+	return res.status(201).json({ updateRule, addrule });
+};
+
 // delete rule by ruleId
 const deleteRule = async (req, res) => {
 	const ruleId = req.params;
@@ -145,5 +199,6 @@ module.exports = {
 	getRulesByRuleId,
 	getRulesByCaseType,
 	updateRule,
+	updateRuleAndAdd,
 	deleteRule,
 };

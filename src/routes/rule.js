@@ -4,6 +4,7 @@ const {
 	getRulesByRuleId,
 	getRulesByCaseType,
 	updateRule,
+	updateRuleAndAdd,
 	deleteRule,
 } = require('../controllers/rule');
 
@@ -14,5 +15,6 @@ router.get('/ruleid/:ruleId', getRulesByRuleId);
 router.get('/casetype/:caseType', getRulesByCaseType);
 router.delete('/ruleid/:ruleId', deleteRule);
 router.put('/:ruleId', updateRule);
+router.put('/changeRule/:ruleId', updateRuleAndAdd);
 
 module.exports = router;
