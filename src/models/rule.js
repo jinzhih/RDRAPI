@@ -2,17 +2,20 @@
 const { Schema, model } = require('mongoose');
 
 const schema = new Schema({
-	ruleId: { type: String },
-	ruleName: { type: String },
+	ruleId: { type: Number },
+	name: { type: String },
 	ruleOrder: { type: Number },
 	ruleParent: {
 		type: String,
 		default: '',
 	},
-	caseType: { type: Number },
-	ruleTarget: { type: String },
-	ruleConclusion: { type: String },
-	ruleFeatures: { type: Map },
+	caseType: { type: String },
+	target: { type: String },
+	conclusion: { type: String },
+	nextRuleId: { type: Number },
+	subRuleIds: { type: Array },
+	cornerStoneId: { type: Number },
+	atts: { type: Map },
 	isStop: {
 		type: Boolean,
 		default: false,

@@ -2,17 +2,39 @@ const Rule = require('../models/rule');
 const { genRuleOrder } = require('../utils/genOrder');
 
 // add rule
+// ruleId: { type: Number },
+// name: { type: String },
+// ruleOrder: { type: Number },
+// ruleParent: {
+// 	type: String,
+// 	default: '',
+// },
+// caseType: { type: String },
+// target: { type: String },
+// conclusion: { type: String },
+// nextRuleId: { type: Number },
+// subRuleIds: { type: Array },
+// cornerStoneId: { type: Number },
+// atts: { type: Map },
+// isStop: {
+// 	type: Boolean,
+// 	default: false,
+// },
 const addRule = async (req, res) => {
 	const {
 		ruleId,
-		ruleName,
+		name,
 		ruleParent,
 		caseType,
-		ruleTarget,
-		ruleConclusion,
-		ruleFeatures,
+		target,
+		conclusion,
+		atts,
 		isStop,
+		nextRuleId,
+		subRuleIds,
+		cornerStoneId,
 	} = req.body;
+	console.log(req.body);
 	const existingRule = await Rule.findOne({ ruleId });
 	if (existingRule) {
 		return res.status(202).json('Rule already exist');
@@ -25,16 +47,19 @@ const addRule = async (req, res) => {
 
 	const rule = new Rule({
 		ruleId,
-		ruleName,
-		ruleOrder,
+		name,
 		ruleParent,
 		caseType,
-		ruleTarget,
-		ruleConclusion,
-		ruleFeatures,
+		target,
+		conclusion,
+		atts,
 		isStop,
+		nextRuleId,
+		subRuleIds,
+		cornerStoneId,
+		ruleOrder,
 	});
-
+	console.log(rule);
 	await rule.save();
 	return res.status(201).json(rule);
 };
