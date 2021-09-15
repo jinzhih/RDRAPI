@@ -86,6 +86,46 @@ const getRulesByCaseType = async (req, res) => {
 	return res.json(rules);
 };
 
+//update rules by ruleId
+const updateRule = async (req, res) => {
+	const ruleId = req.params;
+	const {
+		name,
+		ruleParent,
+		caseType,
+		target,
+		conclusion,
+		atts,
+		isStop,
+		nextRuleId,
+		subRuleIds,
+		cornerStoneId,
+	} = req.body;
+	const rule = await Rule.find(ruleId).exec();
+	if (rule.length === 0) {
+		return res.status(404).json('rule not found in this ruleid');
+	}
+
+	const id = rule[0]._id;
+	const newRule = await Rule.findByIdAndUpdate(
+		id,
+		{
+			name,
+			ruleParent,
+			caseType,
+			target,
+			conclusion,
+			atts,
+			isStop,
+			nextRuleId,
+			subRuleIds,
+			cornerStoneId,
+		},
+		{ new: true }
+	).exec();
+	return res.json(newRule);
+};
+
 // delete rule by ruleId
 const deleteRule = async (req, res) => {
 	const ruleId = req.params;
@@ -100,4 +140,10 @@ const deleteRule = async (req, res) => {
 	return res.status(200).send('delete successful');
 };
 
-module.exports = { addRule, getRulesByRuleId, getRulesByCaseType, deleteRule };
+module.exports = {
+	addRule,
+	getRulesByRuleId,
+	getRulesByCaseType,
+	updateRule,
+	deleteRule,
+};

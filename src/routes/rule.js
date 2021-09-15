@@ -3,6 +3,7 @@ const {
 	addRule,
 	getRulesByRuleId,
 	getRulesByCaseType,
+	updateRule,
 	deleteRule,
 } = require('../controllers/rule');
 
@@ -12,5 +13,6 @@ router.post('/', addRule);
 router.get('/ruleid/:ruleId', getRulesByRuleId);
 router.get('/casetype/:caseType', getRulesByCaseType);
 router.delete('/ruleid/:ruleId', deleteRule);
+router.put('/:ruleId', updateRule);
 
 module.exports = router;
